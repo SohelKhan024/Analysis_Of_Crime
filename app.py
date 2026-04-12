@@ -122,18 +122,15 @@ with st.sidebar:
     uploaded_file = st.sidebar.file_uploader("📤 Upload CSV", type="csv") if data_source == "Upload CSV" else None
 
     import os
-    DEFAULT_DATA_PATH = "data/demo_crime_small.csv"
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DEFAULT_DATA_PATH = os.path.join(BASE_DIR, "data", "demo_crime_small.csv")
 
     # Ensure dataset is loaded
-    if st.session_state["df"] is None:
-        st.info("👆 Please select or upload a dataset to get started")
+    st.info("👆 Select a data source and click 'Load Dataset' to begin")
 
     if st.button("🚀 Load Dataset", use_container_width=True):
         if data_source == "Use Default Dataset":
-            try:
-                if not os.path.exists(DEFAULT_DATA_PATH):
-                    st.error(f"Default dataset not found: {DEFAULT_DATA_PATH}")
-                else:
+                if os.path.exists(DEFAULT_DATA_PATH):
                     df_temp = pd.read_csv(DEFAULT_DATA_PATH)
                     df_temp = prepare_dashboard_dataframe(df_temp)
 
@@ -144,10 +141,9 @@ with st.sidebar:
                     st.session_state["filtered_df"] = df_temp.copy()
                     st.session_state["column_mapping"] = None
                     st.success("✅ Default dataset loaded successfully")
-                    st.info(f"Dataset loaded: {df_temp.shape[0]} rows, {df_temp.shape[1]} columns")
-                    st.dataframe(df_temp.head())
-            except Exception as e:
-                st.error(f"Failed to load default dataset: {e}")
+                else:
+                    st.error("Default dataset not found: data/demo_crime_small.csv")
+
 
         elif uploaded_file is not None:
             try:
