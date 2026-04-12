@@ -1,11 +1,10 @@
-# CrimeAnalysis Task TODO - Hotspot Logic Adaptation
+# Streamlit Crime Analysis Fix TODO
 
-## Approved Plan Breakdown
-**Current Task: Fix ONLY Hotspots section for dynamic dataset adaptation (no other changes).**
-
-1. [x] Create detailed edit plan for app.py Hotspots tab based on user specs.
-2. [x] Implement edits to app.py using edit_file with precise diffs.
-3. [x] Test changes: streamlit run app.py, verify Hotspots behavior with default/uploaded datasets (note: streamlit requires install).
-4. [x] Update TODO.md with completion.
-5. [x] attempt_completion with demo command.
+## Steps from approved plan:
+- [x] 1. Clone repo locally (done)
+- [x] 2. Analyze files (requirements.txt fixed, app.py/backend.py/ui_components.py verified)
+- [x] 3. Fix requirements.txt (remove conflicts/duplicates) ✅
+- [x] 4. Setup venv & install deps (successful) ✅
+- [ ] 5. Commit/push changes: git add . && git commit -m "Fix requirements.txt" && git push
+- [ ] 6. Verify Streamlit Cloud deployment
 
