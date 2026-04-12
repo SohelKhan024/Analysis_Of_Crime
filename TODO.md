@@ -1,10 +1,21 @@
-# Streamlit Crime Analysis Fix TODO
+# Fix Default Dataset Loading Error - Progress Tracker
 
-## Steps from approved plan:
-- [x] 1. Clone repo locally (done)
-- [x] 2. Analyze files (requirements.txt fixed, app.py/backend.py/ui_components.py verified)
-- [x] 3. Fix requirements.txt (remove conflicts/duplicates) ✅
-- [x] 4. Setup venv & install deps (successful) ✅
-- [ ] 5. Commit/push changes: git add . && git commit -m "Fix requirements.txt" && git push
-- [ ] 6. Verify Streamlit Cloud deployment
+## Plan Steps:
+- [x] **1. Create missing `data/demo_crime_small.csv`** (Done: Copied valid sample data)
+- [x] **2. Verify file exists** (Done: `ls -la` confirms from project dir)
+- [ ] **3. Install deps** (run below)
+- [ ] **4. Run app from PROJECT DIR** (`cd Analysis_Of_Crime && streamlit run app.py`)
+  - Select "Use Default Dataset" → "🚀 Load Dataset" → ✅ No error
+- [ ] **5. Test tabs (Analysis/Hotspots/Prediction)**
+- [x] **Status**: Dataset ready. Error now from wrong CWD/missing streamlit.
 
+## Install Commands (project-local venv):
+```bash
+cd /Users/sohelkhan/Desktop/Analysis_Of_Crime
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+**Expected result**: Default dataset loads successfully.

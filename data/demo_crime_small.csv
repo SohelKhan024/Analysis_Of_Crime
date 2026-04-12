@@ -1,0 +1,11 @@
+crime,date,time,area_name,lat,lon
+Burglary,2024-01-01,08:30,Downtown,34.0522,-118.2437
+Robbery,2024-01-01,22:15,Hollywood,34.0928,-118.3287
+Assault,2024-01-02,14:45,South LA,33.9895,-118.3089
+Vehicle Theft,2024-01-02,03:20,Koreatown,34.0614,-118.3056
+Vandalism,2024-01-03,19:05,Venice,33.9850,-118.4695
+Theft,2024-01-03,11:10,Mid-Wilshire,34.0617,-118.3404
+Fraud,2024-01-04,16:40,Westlake,34.0567,-118.2700
+Battery,2024-01-04,01:55,Echo Park,34.0782,-118.2606
+Burglary,2024-01-05,09:25,North Hollywood,34.1722,-118.3769
+Robbery,2024-01-05,23:35,Watts,33.9380,-118.2450
