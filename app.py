@@ -126,8 +126,7 @@ with st.sidebar:
     DEFAULT_DATA_PATH = os.path.join(BASE_DIR, "data", "demo_crime_small.csv")
 
     # Ensure dataset is loaded
-    if st.session_state["df"] is None:
-        st.info("👆 Please select or upload a dataset to get started")
+    st.info("👆 Select a data source and click 'Load Dataset' to begin")
 
     if st.button("🚀 Load Dataset", use_container_width=True):
         if data_source == "Use Default Dataset":
@@ -143,7 +142,7 @@ with st.sidebar:
                     st.session_state["column_mapping"] = None
                     st.success("✅ Default dataset loaded successfully")
                 else:
-                    st.warning("⚠️ Default dataset file not found. Please upload a dataset.")
+                    st.error("Default dataset not found: data/demo_crime_small.csv")
 
 
         elif uploaded_file is not None:

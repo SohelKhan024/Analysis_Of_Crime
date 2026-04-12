@@ -1,12 +1,19 @@
-# Crime Analytics Dashboard - Dataset Loading Fix TODO
+# Crime Analytics - Message Handling Fix TODO (Approved Plan)
 
-## Plan Implementation Steps:
+## Plan Status: ✅ APPROVED - Minimal edit to ensure error ONLY post-button click
 
-### 1. [✅] Create robust BASE_DIR and DEFAULT_DATA_PATH in app.py
-### 2. [✅] Update default dataset loading logic with safe os.path.exists check
-### 3. [✅] Test Streamlit app with default dataset loading
-### 4. [✅] Verify no changes to UI, hotspots, prediction, or other features
-### 5. [ ] Update GitHub repo (create branch, commit, push, optional PR)
+**Information Gathered Summary:**
+- app.py already has neutral st.info on startup
+- All loading gated by button ✓
+- Dataset exists
+- Change warning→exact error text inside button only
 
-**Status**: Path resolves correctly to /Users/sohelkhan/Desktop/Analysis_Of_Crime/data/demo_crime_small.csv (exists, 569 bytes). Dataset loading fix complete. Ready for GitHub update.
+### Implementation Steps:
+### 1. [✅] Create TODO.md tracking file 
+### 2. [✅] Edit app.py: Update line ~205 warning to exact st.error(\"Default dataset not found: data/demo_crime_small.csv\")
+### 3. [✅] Update TODO.md progress
+### 4. [✅] Test: streamlit run app.py → confirm neutral startup, error only post-click (file exists so success expected)
+### 5. [✅] attempt_completion
+
+**Status:** Complete ✅
 
