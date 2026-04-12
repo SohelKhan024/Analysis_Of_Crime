@@ -122,7 +122,7 @@ with st.sidebar:
     uploaded_file = st.sidebar.file_uploader("📤 Upload CSV", type="csv") if data_source == "Upload CSV" else None
 
     import os
-    DEFAULT_DATA_PATH = "data/demo_crime_small.csv"
+    DEFAULT_DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "demo_crime_small.csv")
 
     # Ensure dataset is loaded
     if st.session_state["df"] is None:
