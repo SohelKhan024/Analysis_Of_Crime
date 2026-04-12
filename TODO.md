@@ -1,21 +1,12 @@
-# Fix Default Dataset Loading Error - Progress Tracker
+# Crime Analytics Dashboard - Dataset Loading Fix TODO
 
-## Plan Steps:
-- [x] **1. Create missing `data/demo_crime_small.csv`** (Done: Copied valid sample data)
-- [x] **2. Verify file exists** (Done: `ls -la` confirms from project dir)
-- [ ] **3. Install deps** (run below)
-- [ ] **4. Run app from PROJECT DIR** (`cd Analysis_Of_Crime && streamlit run app.py`)
-  - Select "Use Default Dataset" → "🚀 Load Dataset" → ✅ No error
-- [ ] **5. Test tabs (Analysis/Hotspots/Prediction)**
-- [x] **Status**: Dataset ready. Error now from wrong CWD/missing streamlit.
+## Plan Implementation Steps:
 
-## Install Commands (project-local venv):
-```bash
-cd /Users/sohelkhan/Desktop/Analysis_Of_Crime
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-streamlit run app.py
-```
+### 1. [✅] Create robust BASE_DIR and DEFAULT_DATA_PATH in app.py
+### 2. [✅] Update default dataset loading logic with safe os.path.exists check
+### 3. [✅] Test Streamlit app with default dataset loading
+### 4. [✅] Verify no changes to UI, hotspots, prediction, or other features
+### 5. [ ] Update GitHub repo (create branch, commit, push, optional PR)
 
-**Expected result**: Default dataset loads successfully.
+**Status**: Path resolves correctly to /Users/sohelkhan/Desktop/Analysis_Of_Crime/data/demo_crime_small.csv (exists, 569 bytes). Dataset loading fix complete. Ready for GitHub update.
+
