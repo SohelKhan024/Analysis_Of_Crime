@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
+import streamlit as st  # for optional warnings
 
 
 class CrimeDataProcessor:
@@ -102,35 +103,60 @@ class CrimeRiskPredictor:
         self.feature_columns = None
 
     def prepare_features(self, df):
-        features_df = df[['hour', 'area_name', 'crm_cd_desc', 'lat', 'lon']].copy()
+        """Dynamic feature preparation using available numeric + categorical cols."""
+        if df.empty:
+            return pd.DataFrame()
 
-        for col in ['area_name', 'crm_cd_desc']:
-            le = LabelEncoder()
-            features_df[col] = le.fit_transform(features_df[col].astype(str))
-            self.feature_encoders[col] = le
-
+        # Dynamic numeric features
+        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        
+        # Categorical candidates for encoding
+        cat_candidates = ['area_name', 'crm_cd_desc', 'day_of_week']
+        cat_cols = [c for c in cat_candidates if c in df.columns]
+        
+        features_df = df[numeric_cols + cat_cols].copy().fillna(0)
+        
+        # Encode categoricals
+        for col in cat_cols:
+            if col in df.columns:
+                le = LabelEncoder()
+                features_df[col] = le.fit_transform(df[col].astype(str))
+                self.feature_encoders[col] = le
+        
         return features_df
 
-    def train(self, df, target_col='crm_cd_desc'):
-        required_cols = ['hour', 'area_name', 'lat', 'lon', target_col]
-        missing_cols = [c for c in required_cols if c not in df.columns]
-        if missing_cols:
-            raise ValueError(f"Missing required columns for training: {missing_cols}")
+    def train(self, df, target_col=None):
+        """Dynamic training with auto target selection and available features."""
+        if df.empty:
+            self.model = None
+            return None
 
-        train_df = df[required_cols].copy().dropna()
-        if train_df.empty:
-            raise ValueError("No valid rows available for training after preprocessing/filtering.")
+        # Auto-select target
+        target_candidates = ['crm_cd_desc', 'crime', 'crime_type', 'offense', 'area_name']
+        target_col = target_col or next((c for c in target_candidates if c in df.columns), None)
+        
+        if not target_col:
+            print("No suitable target column found")
+            self.model = None
+            return None
 
-        X = train_df[['hour', 'area_name', 'lat', 'lon']].copy()
+        features_df = self.prepare_features(df)
+        if features_df.empty or len(features_df.columns) < 2:
+            print("Insufficient features for training")
+            self.model = None
+            return None
 
-        le_area = LabelEncoder()
-        X['area_name'] = le_area.fit_transform(X['area_name'].astype(str))
-        self.feature_encoders['area_name'] = le_area
+        train_df = features_df.dropna()
+        if len(train_df) < 10:
+            print("Insufficient training rows")
+            self.model = None
+            return None
 
-        le_crime = LabelEncoder()
-        y = le_crime.fit_transform(train_df[target_col].astype(str))
-        self.feature_encoders['crm_cd_desc'] = le_crime
+        le_target = LabelEncoder()
+        y = le_target.fit_transform(df[target_col].astype(str).iloc[train_df.index])
+        self.feature_encoders['target'] = le_target
 
+        X = train_df
         self.model = RandomForestClassifier(
             n_estimators=100,
             random_state=42,
@@ -138,27 +164,48 @@ class CrimeRiskPredictor:
             max_depth=15
         )
         self.model.fit(X, y)
-        self.feature_columns = X.columns
+        self.feature_columns = X.columns.tolist()
 
+        print(f"✅ Trained on {len(train_df)} rows, {len(X.columns)} features")
         return self.model
 
-    def predict_crime_type(self, hour, area_name, lat, lon):
+    def predict_crime_type(self, hour, area_name, lat=0.0, lon=0.0):
         if self.model is None:
             return None
 
-        le_area = self.feature_encoders.get('area_name')
-        try:
-            area_encoded = le_area.transform([area_name])[0]
-        except Exception:
-            area_encoded = 0
-
-        X_input = np.array([[hour, area_encoded, lat, lon]])
+        # Create input matching training features
+        input_data = {}
+        
+        # Always include hour if available
+        if 'hour' in self.feature_columns:
+            input_data['hour'] = hour
+        
+        # Encode area_name if feature exists
+        if 'area_name' in self.feature_columns and 'area_name' in self.feature_encoders:
+            le = self.feature_encoders['area_name']
+            try:
+                input_data['area_name'] = le.transform([area_name])[0]
+            except:
+                input_data['area_name'] = 0
+        
+        # Add lat/lon only if they were training features
+        if 'lat' in self.feature_columns:
+            input_data['lat'] = lat
+        if 'lon' in self.feature_columns:
+            input_data['lon'] = lon
+        
+        # Fill remaining features with 0
+        for col in self.feature_columns:
+            if col not in input_data:
+                input_data[col] = 0.0
+        
+        X_input = np.array([[input_data[col] for col in self.feature_columns]])
         prediction = self.model.predict(X_input)[0]
-
-        le_crime = self.feature_encoders.get('crm_cd_desc')
-        crime_type = le_crime.inverse_transform([prediction])[0]
-
-        return crime_type
+        
+        le_target = self.feature_encoders.get('target')
+        if le_target:
+            return le_target.inverse_transform([prediction])[0]
+        return "Unknown"
 
     def get_feature_importance(self):
         if self.model is None:
