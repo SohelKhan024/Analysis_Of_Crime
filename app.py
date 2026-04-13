@@ -118,12 +118,12 @@ if "column_mapping" not in st.session_state:
 # ==================== HEADER SECTION ====================
 st.markdown("""
 <div class="header-container header-glow fade-up" style="
-    background: linear-gradient(120deg, rgba(31,111,235,0.22), rgba(111,66,193,0.16), rgba(16,185,129,0.12));
+    background: linear-gradient(120deg, rgba(30,58,138,0.3), rgba(147,51,234,0.28), rgba(59,130,246,0.22)); text-align: center; color: white;
     border: 1px solid rgba(88,166,255,0.35);
     box-shadow: 0 10px 36px rgba(31,111,235,0.18), inset 0 0 24px rgba(255,255,255,0.03);
     border-radius: 18px;
 ">
-    <h1 style="margin-bottom:6px;">🚓 Crime Analytics Dashboard</h1>
+    <h1 style="margin-bottom:6px; color: white; text-align: center;">🚓 Fantastic 4: Fighting Crime</h1>
     <p class="subtitle" style="font-size:1.05rem;">Real-time Crime Insights, Intelligent Hotspots & Explainable Prediction</p>
 </div>
 """, unsafe_allow_html=True)
